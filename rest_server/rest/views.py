@@ -52,7 +52,7 @@ def room_register(rq, sessid, rid):
 			timespan.save()
 			timetable = RoomTimetable(room=room, timespan=timespan, owner=user)
 			timetable.save()
-			return response("OK", "Room reserved.")
+			return response("OK", "Room %s reserved." % room.name)
 		else:
 			return response("ERROR", "Start time and end time is required.")
 	else:
@@ -70,7 +70,7 @@ def parkspot_take(rq, sessid, pid):
 		spot = get_object_or_404(ParkSpot, pk=pid)
 		spot.free = False
 		spot.save()
-		return response("OK", "Park spot taken.")
+		return response("OK", "Park spot %s taken." % spot.location)
 	else:
 		return session_expired()
 
@@ -79,7 +79,7 @@ def parkspot_free(rq, sessid, pid):
 		spot = get_object_or_404(ParkSpot, pk=pid)
 		spot.free = True
 		spot.save()
-		return response("OK", "Park spot freed.")
+		return response("OK", "Park spot %s freed." % spot.location)
 	else:
 		return session_expired()
 
@@ -100,6 +100,82 @@ def group(rq, sessid, gid=None):
 			return response("OK", [ GroupSerializer(g) for g in Group.objects.all() ])
 		else:
 			return response("OK", GroupSerializer(get_object_or_404(Group, pk=gid), detail_mode=True))
+	else:
+		return session_expired()
+
+
+def task(rq, sessid, tid=None):
+	if validate_sessid(sessid):
+		if tid is None:
+			return response("OK", [ TaskSerializer(t) for t in Task.objects.all() ])
+		else:
+			return response("OK", TaskSerializer(get_object_or_404(Task, pk=tid), detail_mode=True))
+	else:
+		return session_expired()
+
+
+def task_add(rq, sessid):
+	if validate_sessid(sessid):
+		task = Task(
+			name=rq.GET.get("name"),
+			description=rq.GET.get("description"),
+			time_start=datetime.fromtimestamp(float(rq.GET.get("start"))),
+			deadline=datetime.fromtimestamp(float(rq.GET.get("deadline"))),
+			done=0
+		)
+		task.save()
+		return response("OK", "Task %d added." % task.id)
+	else:
+		return session_expired()
+
+
+def task_update(rq, sessid, tid):
+	if validate_sessid(sessid):
+		name = rq.GET.get("name", None)
+		description = rq.GET.get("description", None)
+		try:
+			deadline = datetime.fromtimestamp(float(rq.GET.get("deadline", None)))
+		except:
+			deadline = None
+		done = rq.GET.get("done", None)
+		add_member = rq.GET.get("add_member")
+
+		task = get_object_or_404(Task, pk=tid)
+		if name:
+			task.name = name
+		if description:
+			task.description = description
+		if deadline:
+			task.deadline = deadline
+		if done:
+			task.done = done
+		if add_member:
+			role = rq.GET.get("role", None)
+			if role:
+				membership = TaskMembership(
+					task=task,
+					user=get_object_or_404(User, pk=add_member),
+					role=get_object_or_404(Role, pk=role)
+				)
+				membership.save()
+			else:
+				return response("ERROR", "When adding member you must specify role.")
+		task.save()
+		return response("OK", "Task %d updated." % task.id)
+	else:
+		return session_expired()
+
+
+def task_comment(rq, sessid, tid):
+	if validate_sessid(sessid):
+		session = get_object_or_404(Session, session_hash=sessid)
+		task = get_object_or_404(Task, pk=tid)
+		user = session.user
+		comment = Comment(user=user, text=rq.GET.get("text"))
+		comment.save()
+		task.comments.add(comment)
+		task.save()
+		return response("OK", "Comment %d saved." % comment.id)
 	else:
 		return session_expired()
 

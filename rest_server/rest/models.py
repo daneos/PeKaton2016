@@ -76,6 +76,15 @@ class EventMembership(models.Model):
 	role = models.ForeignKey(Role, on_delete=models.CASCADE)
 
 
+class Comment(models.Model):
+	id = models.AutoField(primary_key=True)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	text = models.TextField()
+
+	def __str__(self):
+		return str(self.id)
+
+
 class Task(models.Model):
 	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=50)
@@ -84,6 +93,7 @@ class Task(models.Model):
 	deadline = models.DateTimeField()
 	done = models.PositiveSmallIntegerField()
 	members = models.ManyToManyField(User, through="TaskMembership")
+	comments = models.ManyToManyField(Comment)
 
 	def __str__(self):
 		return "id:%d %s" % (self.id, self.name)

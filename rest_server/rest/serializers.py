@@ -55,3 +55,16 @@ def GroupSerializer(g, detail_mode=False):
 	else:
 		data['members'] = [ u.id for u in g.members.all() ]
 	return data
+
+def TaskSerializer(t, detail_mode=False):
+	data = {}
+	data['id'] = t.id
+	data['name'] = t.name
+	data['done'] = t.done
+	data['deadline'] = str(t.deadline)
+	if detail_mode:
+		membership = TaskMembership.objects.filter(task=t)
+		data['time_start'] = str(t.time_start)
+		data['members'] = [ { 'user': member.user.id, 'role': member.role.id } for member in membership ]
+		data['comments'] = [ { 'id': comment.id, 'user': comment.user.id, 'text': comment.text } for comment in t.comments.all() ]
+	return data

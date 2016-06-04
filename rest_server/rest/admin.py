@@ -16,4 +16,6 @@ admin.site.register(RoomTimetable)
 admin.site.register(UserTimetable)
 admin.site.register(TimeSpan)
 admin.site.register(FoodTicket)
+admin.site.register(TaskMembership)
+admin.site.register(Comment)
 

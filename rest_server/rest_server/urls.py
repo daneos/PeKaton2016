@@ -36,6 +36,11 @@ urlpatterns = [
     url(r'%s/food/%s/(?P<tid>\d+)/' % (base_url,session),			'rest.views.food'),
     url(r'%s/groups/%s/$' % (base_url,session),						'rest.views.group'),
     url(r'%s/groups/%s/(?P<gid>\d+)/' % (base_url,session),			'rest.views.group'),
+    url(r'%s/tasks/%s/$' % (base_url,session),						'rest.views.task'),
+    url(r'%s/tasks/%s/(?P<tid>\d+)/$' % (base_url,session),			'rest.views.task'),
+    url(r'%s/tasks/%s/add/' % (base_url,session),					'rest.views.task_add'),
+    url(r'%s/tasks/%s/(?P<tid>\d+)/update/' % (base_url,session),	'rest.views.task_update'),
+    url(r'%s/tasks/%s/(?P<tid>\d+)/comment/' % (base_url,session),	'rest.views.task_comment'),
 
 
 
