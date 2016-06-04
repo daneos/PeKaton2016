@@ -17,10 +17,11 @@ from django.conf.urls import include, url
 from django.contrib import admin
 import rest
 
-base_url = r"^/api/rest/v1"
+base_url = r"^api/rest/v1"
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
-    # url(r'%s/login/', rest.views.login)
+    url(r'%s/login' % base_url, 'rest.views.login'),
+    url(r'%s/rooms/(?P<sessid>.+)/' % base_url, 'rest.views.room_list')
 ]
