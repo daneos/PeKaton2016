@@ -1,4 +1,6 @@
 import json
+import datetime
+
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
@@ -14,6 +16,9 @@ def response(status, data):
 
 def validate_sessid(sessid):
 	session = get_object_or_404(Session, session_hash=sessid)
+	if session.active:
+		session.last_activity = datetime.datetime.now()
+		session.save()
 	return session.active
 
 def session_expired():

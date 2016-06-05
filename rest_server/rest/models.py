@@ -13,9 +13,21 @@ class User(models.Model):
 	name = models.CharField(max_length=100)
 	email = models.EmailField()
 	password = models.CharField(max_length=40)
+	points = models.IntegerField()
+	points_available = models.IntegerField()
+	hours = models.FloatField()
+	hour_goal = models.FloatField()
+	salary = models.FloatField()
 
 	def __str__(self):
 		return "id:%d %s" % (self.id, self.name)
+
+class Message(models.Model):
+	id = models.AutoField(primary_key=True)
+	from_user_id = models.IntegerField()
+	to_user_id = models.IntegerField()
+	time = models.DateTimeField(auto_now_add=True)
+	text = models.TextField()
 
 
 class Role(models.Model):
@@ -55,14 +67,23 @@ class GroupMembership(models.Model):
 		return "%s/%s/%s" % (self.user.name, self.group.name, self.role.name)
 
 
+class EventType(models.Model):
+	id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=50)
+
+	def __str__(self):
+		return "id:%d %s" % (self.id, self.name)
+
+
 class Event(models.Model):
 	id = models.AutoField(primary_key=True)
+	type = models.ForeignKey(EventType, on_delete=models.CASCADE)
 	time_start = models.DateTimeField()
 	time_end = models.DateTimeField()
 	name = models.CharField(max_length=50)
 	note = models.TextField()
-	place_ext = models.CharField(max_length=200)
-	place_int = models.ForeignKey(Room, on_delete=models.CASCADE)
+	place_ext = models.CharField(max_length=200, null=True, blank=True)
+	place_int = models.ForeignKey(Room, on_delete=models.CASCADE, null=True, blank=True)
 	members = models.ManyToManyField(User, through='EventMembership')
 	private = models.BooleanField()
 
@@ -108,6 +129,7 @@ class TaskMembership(models.Model):
 class ParkSpot(models.Model):
 	id = models.AutoField(primary_key=True)
 	location = models.CharField(max_length=50)
+	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 	free = models.BooleanField()
 
 	def __str__(self):
