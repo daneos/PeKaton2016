@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Pekaton2016.Models.Group>
+
+@{
+    ViewBag.Title = "Groups";
+}
+@using Pekaton2016.Models
+<h2>Groups</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupName)
+        </th>
+        <th>
+            Members:
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.GroupName)
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <th>Name:</th> 
+                    <th>Role:</th>
+                </tr>
+                @foreach(var member in item.Members)
+                {
+                    <tr>
+                        <td> @member.Name</td>
+                        <td> @member.Role.Name</td>
+                    </tr>
+                }
+            </table>
+        </td>
+    </tr>
+}
+
+</table>

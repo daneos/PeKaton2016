@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Pekaton2016.Models.Voucher>
+
+@{
+    ViewBag.Title = "Vouchers";
+}
+
+<h2>Vouchers</h2>
+
+
+@foreach (var item in Model) {
+        string UrlT = item.Thumb;
+    <a href="/Home/VoucherInfo?id=@item.VoucherId" style="text-decoration: none; color: black">
+        <div style="cursor: pointer; margin-top:50px; background: url(@UrlT); min-height: 400px; background-size: cover;">
+           <div style="font-size: 50px;  margin-left:30px; margin-top: 10px"> @Html.DisplayFor(modelItem => item.Name) </div> 
+        </div>
+    </a>
+         
+
+}
+
