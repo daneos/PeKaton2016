@@ -38,6 +38,8 @@ def ParkSpotSerializer(p):
 	data = {}
 	data['id'] = p.id
 	data['location'] = p.location
+	if p.user:
+		data['user'] = p.user.id
 	data['spot'] = "free" if p.free else "taken"
 	return data
 

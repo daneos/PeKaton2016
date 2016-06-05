@@ -21,6 +21,7 @@ class User(models.Model):
 	hours = models.FloatField()
 	hour_goal = models.FloatField()
 	salary = models.FloatField()
+	logtime = models.DateTimeField(null=True, blank=True)
 
 	def __str__(self):
 		return "User id:%d %s" % (self.id, self.name)

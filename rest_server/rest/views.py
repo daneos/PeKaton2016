@@ -93,7 +93,7 @@ def room_register(rq, sessid, rid):
 	else:
 		return session_expired()
 
-def parkspot(rq, sessid, pid=None):
+def parkspot(rq, sessid):
 	if validate_sessid(sessid):
 		return response("OK", [ ParkSpotSerializer(p) for p in ParkSpot.objects.all() ])
 	else:
@@ -348,5 +348,24 @@ def message_write(rq, sessid):
 		)
 		message.save()
 		return response("OK", "Message %d sent." % message.id)
+	else:
+		return session_expired()
+
+def time_start(rq, sessid):
+	if validate_sessid(sessid):
+		session = get_object_or_404(Session, session_hash=sessid)
+		session.user.logtime = datetime.datetime.now()
+		session.user.save()
+		return response("OK", "Time logging started.")
+	else:
+		return session_expired()
+
+def time_stop(rq, sessid):
+	if validate_sessid(sessid):
+		session = get_object_or_404(Session, session_hash=sessid)
+		diff = datetime.datetime.now() - session.user.logtime
+		session.user.hours += diff.total_seconds()/3600
+		session.user.save()
+		return response("OK", "Time logging stopped.")
 	else:
 		return session_expired()

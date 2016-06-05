@@ -16,14 +16,12 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 import rest
-# import jqchat.urls
 
 base_url = r"^api/rest/v1"
 session = r"(?P<sessid>[0-9a-f\-]+)"
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    # url(r'^chat/', include(jqchat.urls)),
 
     url(r'%s/login' % base_url,										'rest.views.login'),
     url(r'%s/logout/%s/$' % (base_url,session),						'rest.views.logout'),
@@ -56,4 +54,6 @@ urlpatterns = [
     url(r'%s/messages/%s/$' % (base_url,session),					'rest.views.message'),
     url(r'%s/messages/%s/(?P<mid>\d+)/$' % (base_url,session),		'rest.views.message'),
     url(r'%s/messages/%s/write/$' % (base_url,session),				'rest.views.message_write'),
+    url(r'%s/time_start/%s/$' % (base_url,session),					'rest.views.time_start'),
+    url(r'%s/time_stop/%s/$' % (base_url,session),					'rest.views.time_stop'),
 ]
