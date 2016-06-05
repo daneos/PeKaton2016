@@ -1,0 +1,125 @@
+﻿@model Pekaton2016.Models.Task
+
+@{
+    ViewBag.Title = "TaskDetails";
+}
+@if(Session["comment"] != null)
+{
+    string scs = (string)Session["comment"];
+    <div style="font-size: 30px" class="text-success"> @scs</div>
+}
+<h2>Task Details</h2>
+
+<div>
+    <p>
+        <a href="/Home/EditTask?id=@Model.TaskId"> Edit</a> |
+        @Html.ActionLink("Back to List", "Tasks")
+    </p>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TaskName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaskName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Done)
+        </dt>
+
+        <dd>
+           @Model.Done %
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+    </dl>
+    <table class="table">
+        <tr>
+            <th>
+                Member:
+            </th>
+            <th>
+                Role:
+            </th>
+        </tr>
+
+        @foreach (var member in Model.Members)
+        {
+            <tr>
+                <td>
+                    @member.Name
+                </td>
+                <td>
+                    @member.Role.Description
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <table class="table">
+        <tr>
+            <th>
+                Comment:
+            </th>
+            <th>
+                Posted By:
+            </th>
+        </tr>
+
+        @foreach (var comment in Model.Comments)
+        {
+            <tr>
+                <td>
+                    @comment.Text
+                </td>
+                <td>
+                    @comment.User.Name
+                </td>
+            </tr>
+        }
+
+    </table>
+    <h4>Add a comment</h4>
+
+
+    @using (Html.BeginForm("TaskDetails", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="form-group" style="margin-top: 50px">
+            <div class="col-md-3 control-label">
+                Comment:
+            </div>
+            <input type="text" hidden="hidden" value="@Model.TaskId" name="id"/>
+            <div class="col-md-9"> <input type="text" name="text" id="text" class="form-control" /> </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Add comment" class="btn btn-default" />
+            </div>
+        </div>
+    }
+</div>
+

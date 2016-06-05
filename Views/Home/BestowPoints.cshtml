@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Pekaton2016.Models.Employee>
+
+@{
+    ViewBag.Title = "Bestow Points";
+    string points = "0";
+    if(Session["pointsava"] !=null)
+    {
+        points = ((string)Session["pointsava"]);
+    }
+}
+@using Pekaton2016.Models
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<h2>Bestow Points</h2>
+<div>
+  
+
+    @using (Html.BeginForm("BestowPoints", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="form-group" style="margin-top: 50px">
+            <div class="col-md-3 control-label">
+                Amount:
+            </div>
+            <div class="col-md-9"> <input type="number" name="points" id="points" min="0" max="@points" class="form-control" style="width: 70px"> </div>
+        </div>
+       
+
+            <div class="form-group">
+                <div class="col-md-3 control-label">
+                    Recepient:
+                </div>
+             <div class="col-md-9" name="id" id="id">
+                <select class="form-control" name="id" id="id" >
+                    @foreach (Employee user in Model)
+                    {
+                        string email = (string)(((Employee)Session["user"]).Email);
+                        if(user.Email != email)
+                        {
+                            string n = user.Name + " <" + user.Email + ">"; 
+                            <option class="form-control" value="@user.EmployeeId" >@n</option>
+                        }
+                    }
+                </select>
+                 </div>
+
+            </div>
+            <input type="submit" value="Bestow points" class="btn btn-primary col-md-offset-3"  />
+            }
+        </div>

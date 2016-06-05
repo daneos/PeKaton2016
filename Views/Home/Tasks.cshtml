@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Pekaton2016.Models.Task>
+
+@{
+    ViewBag.Title = "Tasks";
+}
+
+<h2>Tasks</h2>
+
+<p>
+    @Html.ActionLink("Create New Task", "CreateTask")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskName)
+        </th>
+   
+        <th>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Done)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaskName)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.EndTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Done) %
+        </td>
+        <td>
+            <a href="/Home/TaskDetails?id=@item.TaskId"> Details</a>
+        </td>
+    </tr>
+}
+
+</table>

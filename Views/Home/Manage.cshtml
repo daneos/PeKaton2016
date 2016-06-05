@@ -1,0 +1,122 @@
+﻿@model Pekaton2016.Models.Employee
+
+@{
+    ViewBag.Title = "Manage";
+    string signedin = (string)Session["signedin"];
+    List<Message> messages = (List<Message>)Session["messages"];
+}
+
+@using Pekaton2016.Models
+<h2>Manage</h2>
+
+<div>
+    <h4>Your Account</h4>
+    @if (TempData["message"] != null)
+    {
+        string message = (string)ViewData["message"];
+        <div class="text-success" style="font-size: 60px">  @message</div>
+    }
+    <hr />
+    <dl class="dl-horizontal col-md-6">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Points)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Points)
+        </dd>
+        <dt>
+            Points Available
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PointsAva) 
+            @if(Convert.ToInt32(Model.PointsAva) > 1)
+            {
+                <a href="/Home/BestowPoints">Bestow Points</a>
+            }
+        </dd>
+
+        <dt>
+            Hours:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Hours)
+        </dd>
+        <dt>
+            Hours Goal:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HoursGoal)
+        </dd>
+        @if(signedin =="false")
+        {
+            <dt>
+                Start Working Session:
+            </dt>
+            <dd>
+                <a href="/Home/StartSession/"> Sign in</a>
+            </dd>
+        }
+        else
+        {
+            <dt>
+                End Working Session:
+            </dt>
+            <dd>
+                <a href="/Home/EndSession/"> Sign out</a>
+            </dd>
+        }
+    </dl>
+    <div class="col-md-6">
+        <table class="table">
+            <tr>
+                <th>
+                    From:
+                </th>
+                <th>
+                    Text:
+                </th>
+                <th>
+                    Time:
+                </th>
+            </tr>
+
+            @foreach (var item in messages)
+            {
+                <tr>
+                    <td>
+                        @item.From.Name
+                    </td>
+                    <td>
+                        @item.Text
+                    </td>
+                    <td>
+                        @item.Time
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    </div>
+    
+
+
+</div>
+

@@ -1,0 +1,52 @@
+﻿@model List<Pekaton2016.Models.ParkSpot>
+@{
+    ViewBag.Title = "ParkingSpots";
+    string userid = ((Employee)Session["user"]).EmployeeId.ToString();
+}
+@using Pekaton2016.Models;
+
+<div class="col-md-12" style="min-height:250px; background: url('http://www.imaginelifestyles.com/luxuryliving/wp-content/uploads/blog/files/u2/25337504.jpeg'); background-size: cover">
+    <div style="margin-top: 22px">
+        <h2 style="color: white; text-align: center; font-size: 60px;">Parking Spots</h2>
+    </div>
+</div>
+@if(Session["message"] != null)
+{
+    <div class="text-success" style="font-size: 30px;"> <strong> @((string)Session["message"]) </strong></div>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            Location:
+        </th>
+        <th>
+            Reserve/Free:
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+                @if (item.Spot == "free")
+                {
+                    <a href="/Home/ReserveParkingSpot?id=@item.ParkSpotId">Reserve</a>
+                }
+                else if (item.OwnerId == userid)
+                {
+                    <a href="/Home/FreeParkingSpot?id=@item.ParkSpotId"> Free</a>
+                }
+                else
+                {
+                    <div>Occupied</div>
+                }
+            </td>
+        </tr>
+    }
+
+</table>

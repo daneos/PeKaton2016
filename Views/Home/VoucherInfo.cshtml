@@ -1,0 +1,24 @@
+﻿@model Pekaton2016.Models.Voucher
+
+@{
+    ViewBag.Title = "VoucherInfo";
+    string UrlT = Model.Thumb;
+    string codeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + Model.Code;
+}
+
+<h2>Voucher Info</h2>
+<a href="/Home/Vouchers/">Back to list</a>
+<div>
+    <div class="row">
+        <div class="col-md-6">
+            <h4>@Html.DisplayFor(model => model.Description)</h4>
+            <h2>Code: @Model.Code</h2>
+        </div>
+        <div class="col-md-6">
+            <img src="@codeUrl" title="QR Code" />
+        </div>
+    </div>
+        <div style="cursor: pointer; margin-top:50px; background: url(@UrlT); min-height: 400px; background-size: cover; class="col-md-12"" >
+            <div style="font-size: 50px;  margin-left:30px; margin-top: 10px"> @Model.Name</div>
+        </div>
+    </div>

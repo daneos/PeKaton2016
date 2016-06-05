@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Pekaton2016.Models.RoomTimeSpan>
+
+@{
+    string roomId = (string)Session["roomId"];
+    ViewBag.Title = "Room Details";
+}
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+  $(function() {
+      $("#startTime").datepicker();
+      $("#endTime").datepicker();
+  });
+</script>
+<h2>Room Details</h2>
+
+<p>
+    @if (Model.Count() > 0)
+    {
+
+        using (Html.BeginForm("ReserveRoom", "Home",  new { ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+                <div class="form-group" style="margin-top: 50px">
+                    <div class="col-md-3 control-label">
+                    Start Date:
+                    </div>
+                    <div class="col-md-9"> <input type="date" name="startDate" id="startDate" class="form-control" /> </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 control-label">
+                        Start Time:
+                    </div>
+                    <div class="col-md-9"> <input type="time" name="startTime" id="startTime" class="form-control" style="width: 100px"/> </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 control-label">
+                        End Date:
+                    </div>
+                        <div class="col-md-9"> <input type="date" name="endDate" id="endDate" class="form-control"/> </div>
+                    </div>
+                <div class="form-group">
+                    <div class="col-md-3 control-label">
+                        End Time:
+                    </div>
+                    <div class="col-md-9"> <input type="time" name="endTime" id="endTime" class="form-control" style="width: 100px" /> </div>
+                </div>
+                <input type="text" hidden="hidden" value="@Model.First().RoomId" name="roomId" id="roomId"/>
+              <input type="submit" value="Reserve" class="btn btn-default col-md-offset-3"/>
+        }
+    }
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Reservation Start Time:
+        </th>
+        <th>
+            Reservation End Time:
+        </th>
+        <th>
+            Reserved By:
+        </th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartTimeS)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EndTimeS)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Owner.Name)
+        </td>
+    </tr>
+}
+
+</table>
