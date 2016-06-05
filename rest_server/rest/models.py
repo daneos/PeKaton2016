@@ -7,6 +7,9 @@ class TimeSpan(models.Model):
 	time_start = models.DateTimeField()
 	time_end = models.DateTimeField()
 
+	def __str__(self):
+		return "TimeSpan id:%d %s-%s" % (self.id, str(self.time_start), str(self.time_end))
+
 
 class User(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -20,7 +23,7 @@ class User(models.Model):
 	salary = models.FloatField()
 
 	def __str__(self):
-		return "id:%d %s" % (self.id, self.name)
+		return "User id:%d %s" % (self.id, self.name)
 
 class Message(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -29,6 +32,9 @@ class Message(models.Model):
 	time = models.DateTimeField(auto_now_add=True)
 	text = models.TextField()
 
+	def __str__(self):
+		return "Message id:%d %d->%d" % (self.id, self.from_user_id, self.to_user_id)
+
 
 class Role(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -36,7 +42,7 @@ class Role(models.Model):
 	description = models.CharField(max_length=200)
 
 	def __str__(self):
-		return "id:%d %s" % (self.id, self.name)
+		return "Role id:%d %s" % (self.id, self.name)
 
 
 class Room(models.Model):
@@ -46,7 +52,7 @@ class Room(models.Model):
 	timetable = models.ManyToManyField(TimeSpan, through='RoomTimetable')
 
 	def __str__(self):
-		return "id:%d %s" % (self.id, self.name)
+		return "Room id:%d %s" % (self.id, self.name)
 
 
 class Group(models.Model):
@@ -55,7 +61,7 @@ class Group(models.Model):
 	members = models.ManyToManyField(User, through='GroupMembership')
 
 	def __str__(self):
-		return "id:%d %s" % (self.id, self.name)
+		return "Group id:%d %s" % (self.id, self.name)
 
 
 class GroupMembership(models.Model):
@@ -64,7 +70,7 @@ class GroupMembership(models.Model):
 	role = models.ForeignKey(Role, on_delete=models.CASCADE)
 
 	def __str__(self):
-		return "%s/%s/%s" % (self.user.name, self.group.name, self.role.name)
+		return "GroupMembership %s/%s/%s" % (self.user.name, self.group.name, self.role.name)
 
 
 class EventType(models.Model):
@@ -72,7 +78,7 @@ class EventType(models.Model):
 	name = models.CharField(max_length=50)
 
 	def __str__(self):
-		return "id:%d %s" % (self.id, self.name)
+		return "EventType id:%d %s" % (self.id, self.name)
 
 
 class Event(models.Model):
@@ -88,13 +94,16 @@ class Event(models.Model):
 	private = models.BooleanField()
 
 	def __str__(self):
-		return "id:%d %s" % (self.id, self.name)
+		return "Event id:%d %s" % (self.id, self.name)
 
 
 class EventMembership(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	event = models.ForeignKey(Event, on_delete=models.CASCADE)
 	role = models.ForeignKey(Role, on_delete=models.CASCADE)
+
+	def __str__(self):
+		return "EventMembership %s/%s/%s" % (self.user.name, self.event.name, self.role.name)
 
 
 class Comment(models.Model):
@@ -103,7 +112,7 @@ class Comment(models.Model):
 	text = models.TextField()
 
 	def __str__(self):
-		return str(self.id)
+		return "Comment id:%d" % self.id
 
 
 class Task(models.Model):
@@ -117,13 +126,16 @@ class Task(models.Model):
 	comments = models.ManyToManyField(Comment)
 
 	def __str__(self):
-		return "id:%d %s" % (self.id, self.name)
+		return "Task id:%d %s" % (self.id, self.name)
 
 
 class TaskMembership(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	task = models.ForeignKey(Task, on_delete=models.CASCADE)
 	role = models.ForeignKey(Role, on_delete=models.CASCADE)
+
+	def __str__(self):
+		return "TaskMembership %s/%s/%s" % (self.user.name, self.task.name, self.role.name)
 
 
 class ParkSpot(models.Model):
@@ -133,7 +145,7 @@ class ParkSpot(models.Model):
 	free = models.BooleanField()
 
 	def __str__(self):
-		return "id:%d %s" % (self.id, self.location)
+		return "ParkSpot id:%d %s" % (self.id, self.location)
 
 
 class Session(models.Model):
@@ -145,7 +157,7 @@ class Session(models.Model):
 	session_hash = models.UUIDField(default=uuid.uuid4)
 
 	def __str__(self):
-		return "id:%d %s" % (self.id, str(self.session_hash))
+		return "Session id:%d %s" % (self.id, str(self.session_hash))
 
 
 class RoomTimetable(models.Model):
@@ -155,7 +167,7 @@ class RoomTimetable(models.Model):
 	owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
 	def __str__(self):
-		return str(self.id)
+		return "RoomTimetable id:%d" % self.id
 
 
 class UserTimetable(models.Model):
@@ -164,7 +176,7 @@ class UserTimetable(models.Model):
 	timespan = models.ForeignKey(TimeSpan, on_delete=models.CASCADE)
 
 	def __str__(self):
-		return str(self.id)
+		return "UserTimetable id:%d" % str(self.id)
 
 
 class FoodTicket(models.Model):
@@ -175,4 +187,4 @@ class FoodTicket(models.Model):
 	thumb = models.URLField()
 
 	def __str__(self):
-		return "id:%d %s" % (self.id, self.name)
+		return "FoodTicket id:%d %s" % (self.id, self.name)
